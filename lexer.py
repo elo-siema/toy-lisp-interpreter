@@ -2,16 +2,12 @@ from sly import Lexer
 
 class LispLexer(Lexer):
     # Set of token names.   This is always required
-    tokens = { SYMBOL, STRING, NUMBER, COND, ELSE, DO }
+    tokens = { SYMBOL, STRING, NUMBER }
 
     SYMBOL = r'[a-zA-Z_+=\*\-\<\>][a-zA-Z0-9_+\*\-\<\>]*'
-    SYMBOL['cond'] = COND
-    SYMBOL['else'] = ELSE
-    SYMBOL['do'] = DO
-    
     @_(r'"(.*?)"')
     def STRING(self, t):
-        t.value = t.value[1:-1]
+        t.value = t.value[1:-1] # Strip quotes
         return t
 
     @_(r'\d+')

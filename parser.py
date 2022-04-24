@@ -18,9 +18,6 @@ class LispParser(Parser):
     @_('SYMBOL',
        'STRING',
        'NUMBER',
-       'COND',
-        'ELSE',
-        'DO',
        'list_'
        )
     def expr(self, p):
