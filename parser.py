@@ -6,12 +6,11 @@ class LispParser(Parser):
     tokens = LispLexer.tokens
     debugfile = 'parser.out'
 
+    # Grammar rules and actions
     @_('expr seq')
     def seq(self, p):
-        return ('seq', [p.expr, p.seq] if p.seq else [p.expr])
+        return [p.expr, *p.seq] if p.seq else [p.expr]
 
-    
-    # Grammar rules and actions
     @_('SYMBOL',
        'STRING',
        'NUMBER',
@@ -21,11 +20,11 @@ class LispParser(Parser):
        'list_'
        )
     def expr(self, p):
-        return ('expr', p[0])
+        return p[0]
 
     @_('"(" seq ")"')
     def list_(self, p):
-        return ('list', p.seq)
+        return p.seq
 
     @_('')
     def seq(self, p):
