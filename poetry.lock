@@ -1,4 +1,12 @@
 [[package]]
+name = "antlr4-python3-runtime"
+version = "4.7.2"
+description = "ANTLR 4.7.2 runtime for Python 3.6.3"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "argparse"
 version = "1.4.0"
 description = "Python command-line parsing library"
@@ -20,9 +28,12 @@ test = ["pytest", "regex"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "ad6dcb4f08f97ca6e1ab2708f6b5a044f07c3b535d0a2b2ec8180ce08d4d897a"
+content-hash = "8c6893893e5023d9f032c750b2999d5289aade083ee2b22bf69ce5b73e2939f0"
 
 [metadata.files]
+antlr4-python3-runtime = [
+    {file = "antlr4-python3-runtime-4.7.2.tar.gz", hash = "sha256:168cdcec8fb9152e84a87ca6fd261b3d54c8f6358f42ab3b813b14a7193bb50b"},
+]
 argparse = [
     {file = "argparse-1.4.0-py2.py3-none-any.whl", hash = "sha256:c31647edb69fd3d465a847ea3157d37bed1f95f19760b11a47aa91c04b666314"},
     {file = "argparse-1.4.0.tar.gz", hash = "sha256:62b089a55be1d8949cd2bc7e0df0bddb9e028faefc8c32038cc84862aefdd6e4"},

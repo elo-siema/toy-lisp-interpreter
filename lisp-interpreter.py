@@ -1,6 +1,7 @@
 import argparse
 import sys
 from lexer import LispLexer
+from parser import LispParser
 
 argparser = argparse.ArgumentParser(description='Lisp Interpreter')
 argparser.add_argument('-f', '--file', help='File to interpret', type=argparse.FileType('r'), required=True)
@@ -17,5 +18,18 @@ with args.file as file:
 
 
     lexer = LispLexer()
-    for tok in lexer.tokenize(content):
-        print('type=%r, value=%r' % (tok.type, tok.value))
+    tokens = lexer.tokenize(content)
+    #for tok in tokens:
+    #    print('type=%r, value=%r' % (tok.type, tok.value))
+
+    parser = LispParser()
+    parsed = parser.parse(tokens)
+    print(parsed)
+
+    #while True:
+    #    try:
+    #        text = input('calc > ')
+    #        result = parser.parse(lexer.tokenize(text))
+    #        print(result)
+    #    except EOFError:
+    #        break
