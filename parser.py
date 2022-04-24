@@ -10,6 +10,10 @@ class LispParser(Parser):
     @_('expr seq')
     def seq(self, p):
         return [p.expr, *p.seq] if p.seq else [p.expr]
+    
+    @_('')
+    def seq(self, p):
+        pass
 
     @_('SYMBOL',
        'STRING',
@@ -25,7 +29,3 @@ class LispParser(Parser):
     @_('"(" seq ")"')
     def list_(self, p):
         return p.seq
-
-    @_('')
-    def seq(self, p):
-        pass
