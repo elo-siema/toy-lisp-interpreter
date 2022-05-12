@@ -12,8 +12,7 @@ https://github.com/antlr/grammars-v4/blob/master/racket-bsl/BSL.g4
 https://github.com/antlr/grammars-v4/blob/master/racket-isl/ISL.g4
 https://docs.racket-lang.org/htdp-langs/beginner.html
 https://htdp.org/2020-5-6/Book/i1-2.html
-
-
+http://www.norvig.com/lispy.html
 ```
 (do ((var1 base1 exp1) (var2 base2 exp2) ...)
   ((test? ...) final-exp)
@@ -23,3 +22,19 @@ https://htdp.org/2020-5-6/Book/i1-2.html
 ```
 
 https://github.com/antlr/antlr4/blob/master/doc/python-target.md
+
+ The complete grammar is specified as follows:
+
+parser Lisp:
+    ignore:      '[ \t\n\r]+'
+    token NUM:   '[0-9]+'
+    token ID:    '[-+*/!@%^&=.a-zA-Z0-9_]+' 
+    token STR:   '"\([^\"]+\|\\.\)*"'
+
+    rule expr:   ID              ->  << ('id',ID) >>
+               | STR             ->  << ('str',eval(STR)) >>
+               | NUM             ->  << ('num',atoi(NUM)) >>
+               | list            ->  << list >>
+    rule list:   "(" seq ")"     ->  << seq >>
+    rule seq:                    ->  << [] >>
+               | expr seq        ->  << [expr] + seq >>

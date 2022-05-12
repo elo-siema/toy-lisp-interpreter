@@ -2,6 +2,8 @@ import argparse
 import sys
 from lexer import LispLexer
 from parser import LispParser
+from environment import *
+from eval import *
 
 argparser = argparse.ArgumentParser(description='Lisp Interpreter')
 argparser.add_argument('-f', '--file', help='File to interpret', type=argparse.FileType('r'), required=True)
@@ -25,6 +27,8 @@ with args.file as file:
     parser = LispParser()
     parsed = parser.parse(tokens)
     print(parsed)
+
+    print(eval(parsed, standard_env()))
 
     #while True:
     #    try:
