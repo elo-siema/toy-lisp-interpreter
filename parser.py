@@ -1,3 +1,4 @@
+import sys
 from sly import Parser
 from lexer import LispLexer
 
@@ -62,3 +63,15 @@ class LispParser(Parser):
     @_('"(" seq ")"')
     def list_(self, p):
         return p.seq
+
+    def error(self, token):
+        if token:
+            lineno = getattr(token, 'lineno', 0)
+            if lineno:
+                sys.stderr.write(f'sly: Syntax error at line {lineno}, token={token.type}\n')
+                raise Exception
+            else:
+                sys.stderr.write(f'sly: Syntax error, token={token.type}')
+                raise Exception
+        else:
+            raise EOFError
