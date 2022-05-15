@@ -11,6 +11,56 @@ pip install poetry
 poetry install
 ```
 
+## 0. Opis / dokumentacja
+
+### 0.1. Gramatyka (EBNF)
+
+```ebnf
+seq = expr , seq | ;
+expr = SYMBOL 
+       | STRING
+       | NUMBER
+       | list ;
+list = "(" , seq , ")" ;
+```
+Notacja w specyfikacji SLY dostępna w punkcie "2. Parser"
+
+### 0.2. Opis systemu typizacji dla tłumaczonego języka
+
+Język obsługuje typy:
+
+* List: `(a, b, c, ...)`, reprezentowane przez pythonowe `list`
+* Symbol: Identyfikator - przy ewaluacji jest szukany w środowisku, Przykłady: `lambda`, `+`, `newline`
+* String: Napis, przykład: `"fsfsdfsdf"`
+* Number: Liczba. Lekser obsługuje tylko inty.
+
+### 0.3. Uzasadnienie wyboru konkretnego generatora parserów
+
+Na początku szukałem narzędzia potrafiącego generować parser na podstawie definicji gramatyki EBNF (jak np. GNU Bison), jednak nie znalazłem czegoś takiego dla Pythona.
+
+Przymierzałem się do ANTLR, jednak miałem problemy z konfiguracją / uruchomieniem go.
+
+Zdecydowałem się więc na SLY, które zdawało się mieć lepszą ergonomię niż PLY oraz dobrą dokumentację. Jestem zadowolony z wyboru.
+
+### 0.4. Opis napotkanych problemów, sposób ich rozwiązania
+
+#### 0.4.1 Definiowanie gramatyki
+
+Miałem problem jak szeroka powinna być gramatyka, tj. ile zawrzeć w gramatyce, a ile w ewaluatorze. Ostatecznie zdecydowałem się na opcję najprostszą, czyli lista i 3 podstawowe typy.
+
+#### 0.4.2 Wielolinowe wejście do REPL
+
+Chciałem umożliwić wklejanie bloków kodu do REPL. W tym celu musiałem wyłapywać błędy parsowania (Unexpected EOF). SLY domyślnie nie rzuca takich wyjątków, więc musiałem zrobić overload funkcji error.
+
+Dodatkowo, dodałem możliwość opuszczenia trybu wejścia wieloliniowego przez CTRL+C.
+
+#### 0.4.3 Odróżnienie typów tokenów
+
+Na początku parser tworzył drzewo AST w postaci `[str, [str, str, [...]]]` przez co gubiona była informacja o tym, czy coś jest symbolem, liczbą czy stringiem. Rozwiązałem to przez stworzenie klasy Token oraz podklas odpowiadających typom, oraz sprawdzanie której klasy instancją jest token przy ewaluacji.
+
+Wymagało to również implementacji kilku operatorów / metod na klasie token, jak `__eq__`, `__str__` itp.
+
+
 ## 1. Lekser
 
 ```python
@@ -40,16 +90,6 @@ class LispLexer(Lexer):
 ```
 
 ## 2. Parser
-
-Gramatyka (EBNF):
-```ebnf
-seq = expr , seq | ;
-expr = SYMBOL 
-       | STRING
-       | NUMBER
-       | list ;
-list = "(" , seq , ")" ;
-```
 
 Przykładowe wywołanie:
 ```
@@ -428,7 +468,8 @@ Buzz
 ```
 
 ## Źródła
-lispy: http://norvig.com/lispy.html
-gramatyka lisp: https://theory.stanford.edu/~amitp/yapps/yapps-doc/node2.html
-dokumentacja SLY: https://sly.readthedocs.io/en/latest/sly.html
-programy testowe: http://rosettacode.org/wiki/Category:Scheme
+* lispy: http://norvig.com/lispy.html
+* gramatyka lisp: https://theory.stanford.edu/~amitp/yapps/yapps-doc/node2.html
+* dokumentacja SLY: https://sly.readthedocs.io/en/latest/sly.html
+* programy testowe: http://rosettacode.org/wiki/Category:Scheme
+* pomocny film: https://www.youtube.com/watch?v=eF9qWbuQLuw
