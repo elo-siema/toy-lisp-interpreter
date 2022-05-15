@@ -3,7 +3,6 @@ import math
 import operator as op
 
 class Env(dict):
-    "An environment: a dict of {'var':val} pairs, with an outer Env."
     def __init__(self, parms=(), args=(), outer=None):
         self.update(zip(parms, args))
         self.outer = outer
@@ -13,7 +12,6 @@ class Env(dict):
 
 
 def standard_env() -> Env:
-    "An environment with some Scheme standard procedures."
     env = Env()
     env.update(vars(math)) # sin, cos, sqrt, pi, ...
     env.update({
@@ -43,11 +41,5 @@ def standard_env() -> Env:
         'number?': lambda x: isinstance(x, int),  
 		'print':   print,
         'procedure?': callable,
-        'round':   round,
-        #'symbol?': lambda x: isinstance(x, Symbol),
     })
     return env
-
-
-
-#global_env = standard_env()
