@@ -11,6 +11,15 @@ class Token():
     def __repr__(self):
         return str(self.x)
 
+    def __eq__(self, other):
+        if isinstance(other, Token):
+            return self.x == other.x
+        elif isinstance(other, str):
+            return self.x == other
+
+    def __hash__(self):
+        return hash(self.x)
+
 class StringToken(Token):
     pass
 

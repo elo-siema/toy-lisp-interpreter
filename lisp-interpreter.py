@@ -9,31 +9,25 @@ argparser = argparse.ArgumentParser(description='Lisp Interpreter')
 argparser.add_argument('-f', '--file', help='File to interpret', type=argparse.FileType('r'), required=True)
 
 args = argparser.parse_args()
+lexer = LispLexer()
+parser = LispParser()
 
 if not args.file:
-    argparser.print_usage()
-    sys.exit(-1)
+    # Run as REPL
+    #argparser.print_usage()
+    #sys.exit(-1)
 
 with args.file as file:
+    # Run file
     content = file.read()
+    print("Source: ")
     print(content)
-
-
-    lexer = LispLexer()
+    
     tokens = lexer.tokenize(content)
-    #for tok in tokens:
-    #    print('type=%r, value=%r' % (tok.type, tok.value))
+    ast = parser.parse(tokens)
+    print("Parsed AST: ", ast)
 
-    parser = LispParser()
-    parsed = parser.parse(tokens)
-    print(parsed)
+    result = eval(ast, standard_env())
 
-    print(eval(parsed, standard_env()))
-
-    #while True:
-    #    try:
-    #        text = input('calc > ')
-    #        result = parser.parse(lexer.tokenize(text))
-    #        print(result)
-    #    except EOFError:
-    #        break
+    if result:
+        print(result)
